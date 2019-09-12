@@ -10,5 +10,4 @@ Design:
 - for read time write to a different GeoLRUCache, for each entry in the map, call the other GeoLRUCache's put operation, if there are get requests while writing, process get requests first. If there are put request during writing, cache the request, process it after writing is finished, this ensures that the new get is not overwritten by old information
 
 Missing functionalities: 
-- real time write to a different GeoLRUCache
 - data consistency across regions
