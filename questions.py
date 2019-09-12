@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
 
 # question 1
 # accepts two lines (x1,x2) and (x3,x4) on the x-axis
@@ -14,14 +10,14 @@ def overlap(x1, x2, x3, x4):
     s1_right = max(x1, x2)
     s2_left = min(x3, x4)
     s2_right = max(x3, x4)
-    
+
     if (s1_left < s2_left):
         l_s = [s1_left, s1_right]
         r_s = [s2_left, s2_right]
     else:
         l_s = [s2_left, s2_right]
         r_s = [s1_left, s1_right]
-    
+
     # scenario 1: partially overlap
     if l_s[1] >= r_s[0] and l_s[1] <= r_s[1]:
         return True
@@ -31,10 +27,6 @@ def overlap(x1, x2, x3, x4):
     # scenario 3: no overlap
     else:
         return False
-
-
-# In[ ]:
-
 
 # test scenario 1
 result = overlap(1, 5, 2, 8)
@@ -61,25 +53,22 @@ result = overlap(2, 4, 4, 8)
 assert result == True
 
 
-# In[21]:
-
-
 # question 2
-# accepts 2 version string 
+# accepts 2 version string
 # returns the 0 is equal, -1 if s1 smaller, 1 if s1 bigger
 def cmpString(s1, s2):
     s1_list = s1.split(".")
     s2_list = s2.split(".")
-    
+
     def digit_check(s):
         return s.isdigit()
-    
+
     if not ( all(list(map(digit_check, s1_list))) and all(list(map(digit_check, s2_list))) ):
         raise ValueError('invalid input')
-    
+
     v_1 = list(map(int, s1_list))
     v_2 = list(map(int, s2_list))
-    
+
     min_len = min(len(v_1), len(v_2))
     for i in range(0, min_len):
         if v_1[i] > v_2[i]:
@@ -93,11 +82,6 @@ def cmpString(s1, s2):
             return 0
         else:
             return -1
-        
-
-
-# In[36]:
-
 
 # test invalid input
 try:
@@ -122,9 +106,6 @@ assert cmpString("1.2", "1.1.1") == 1
 assert cmpString("1.1", "1.3.1") == -1
 
 
-# In[140]:
-
-
 # question 3
 # Geo Distributed LRU cache with time expiration
 # let each page be represented by integer
@@ -139,10 +120,10 @@ class Node:
         self.left = left
         self.right = right
         self.timestamp = datetime.now()
-        
+
     def __repr__(self):
         return str(self.content)+" ["+str(self.timestamp) +"] "
-    
+
 class GeoLRUCache:
     # lifetime of nodes in caches is 6 hrs
     def __init__(self,capacity, life=6):
@@ -152,7 +133,7 @@ class GeoLRUCache:
         self.start = None
         self.end = None
         self.life = life
-    
+
     def addToStart(self, node):
         node.right = self.start
         # start's parent is now node
@@ -163,7 +144,9 @@ class GeoLRUCache:
         # if node only node in list
         if self.end == None:
             self.end = self.start
-    
+
+    # helper function
+    # find then removes node from linked list
     def removeNode(self, node):
         # parent not null, point parent to node's child
         if node.left != None:
@@ -178,7 +161,7 @@ class GeoLRUCache:
         else:
             self.end = node.left
         del node
-        
+
     # extract content from LRU cache
     def get(self, key):
         # check if key exists
@@ -189,7 +172,7 @@ class GeoLRUCache:
             return node.content
         else:
             return -1
-    
+
     # insert page index&content into LRU cache
     def put(self, index, content):
         # key exists
@@ -208,11 +191,13 @@ class GeoLRUCache:
                 self.rmEnd()
             self.addToStart(node)
             self.map[index] = node
-    
+
+    # helper function
+    # remove the end node from map and linked list
     def rmEnd(self):
         del self.map[self.end.index]
         self.removeNode(self.end)
-        
+
     # delete all expired pages (added life hours ago)
     def clearExpired(self):
         current_time = datetime.now()
@@ -223,14 +208,12 @@ class GeoLRUCache:
             # all nodes before should be more recent, stop
             else:
                 break
-            
+
+    # print the contents of the map
     def display(self):
         print(self.map)
 
-
-# In[141]:
-
-
+# a simple test case
 cache = GeoLRUCache(3)
 cache.put(0, 100)
 cache.put(4, 100)
@@ -242,10 +225,3 @@ cache.put(4, 100)
 
 cache.clearExpired()
 cache.display()
-
-
-# In[ ]:
-
-
-
-
